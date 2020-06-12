@@ -34,17 +34,20 @@ facebook.get_financial_info()
 
 
 FinancialInfo.change_risk_free(0.05)
-# FinancialInfo.change_weight([0.1,0.1,0.1,0.1,0.1,0.5])
+# # FinancialInfo.change_weight([0.1,0.1,0.1,0.1,0.1,0.5])
 
-FinancialInfo.port_weight([0.1,0.1,0.1,0.1,0.1,0.5])
+# FinancialInfo.port_weight([0.1,0.1,0.1,0.1,0.1,0.5])
 
-# FinancialInfo.change_weight([0.2,0.2,0.3,0.1,0.1,0.1])
+# # FinancialInfo.change_weight([0.2,0.2,0.3,0.1,0.1,0.1])
 
-FinancialInfo.port_weight([0.2,0.2,0.3,0.1,0.1,0.1])
+# FinancialInfo.port_weight([0.2,0.2,0.3,0.1,0.1,0.1])
 
-FinancialInfo.port_weight([0.12,0.12,0.16,0.15,0.15,0.3])
+# FinancialInfo.port_weight([0.12,0.12,0.16,0.15,0.15,0.3])
 
-
+for i in range (1,10):
+    value = np.random.dirichlet(np.ones(6),size=1)
+    lst = value.tolist()
+    FinancialInfo.port_weight(lst[0])
 
 
 

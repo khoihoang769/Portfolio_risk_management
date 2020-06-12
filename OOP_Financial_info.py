@@ -104,8 +104,8 @@ class FinancialInfo:
         df.insert(7,'Volatility', pfvol)
         df.insert(8, 'Sharpe', pfsharpe)
 
-        # df['Volatility'] = portfolio_volatility
-        print (df)
+        df_sorted = df.sort_values(by = ['Sharpe'], ascending = False)
+        print (df_sorted)
         
     @classmethod
     def change_risk_free(cls, amount):
