@@ -59,13 +59,14 @@ class FinancialInfo:
         # print(Stock_data_frames)
         weightedreturns = Stock_data_frames.mul(FinancialInfo.weight, axis = 1)
         # print (Stock_data_frames)
-        cummulativereturns = ((1 + weightedreturns.sum(axis = 1)).cumprod() - 1)
+        # cummulativereturns = ((1 + weightedreturns.sum(axis = 1)).cumprod() - 1)
+        cummulativereturns = weightedreturns.sum(axis = 1)
         # print (cummulativereturns)
         portfolio_weights_ew = np.repeat(1/FinancialInfo.num_stocks, FinancialInfo.num_stocks)
         cummulativereturns_ew = Stock_data_frames.iloc[:,0:FinancialInfo.num_stocks].mul(portfolio_weights_ew, axis = 1).sum(axis =1)
         
         cummulativereturns.plot(color = 'Red')
-        cummulativereturns_ew.plot(color = 'Blue')
+        # cummulativereturns_ew.plot(color = 'Blue')
         # plt.show()
     
     # @classmethod
@@ -84,14 +85,14 @@ class FinancialInfo:
         cov_mat_annual = cov_mat*252
         portfolio_weights = np.array(FinancialInfo.weight)
         portfolio_volatility = np.sqrt(np.dot(portfolio_weights.T, np.dot(cov_mat_annual, portfolio_weights)))
-        print (f'The volatility of this portfoliois:  {portfolio_volatility}')
+        # print (f'The volatility of this portfoliois:  {portfolio_volatility}')
         FinancialInfo.vol_list.append(portfolio_volatility)
         pfvol = pd.DataFrame(FinancialInfo.vol_list)
 
         Portfolio_returns = weightedreturns.sum(axis = 1)
         total_returns = Portfolio_returns.sum()
         Portfolio_sharpe = (total_returns - FinancialInfo.risk_free)/portfolio_volatility
-        print (f'The total returns for this portfolio is: {total_returns}')
+        # print (f'The total returns for this portfolio is: {total_returns}')
         FinancialInfo.returns_list.append(total_returns)
         pfreturns = pd.DataFrame(FinancialInfo.returns_list)
         FinancialInfo.sharpe_list.append(Portfolio_sharpe)
@@ -105,8 +106,20 @@ class FinancialInfo:
         df.insert(8, 'Sharpe', pfsharpe)
 
         df_sorted = df.sort_values(by = ['Sharpe'], ascending = False)
-        print (df_sorted)
+        # print (df_sorted)
+        MSR_weights = df_sorted.iloc[0,0:FinancialInfo.num_stocks]        
+        MSR_weights_array = np.array(MSR_weights)
+        MSRreturns = Stock_data_frames.iloc[:,0:FinancialInfo.num_stocks].mul(MSR_weights_array, axis = 1).sum(axis = 1)
+        MSRreturns.plot(color = 'Orange')
         
+        df_vol_sorted = df.sort_values(by = ['Volatility'], ascending = True)
+        GMV_weights = df_vol_sorted.iloc[0,0:FinancialInfo.num_stocks]
+        GMV_weights_array = np.array(GMV_weights)
+        GMVreturns = Stock_data_frames.iloc[:,0:FinancialInfo.num_stocks].mul(GMV_weights_array, axis = 1).sum(axis = 1)
+        GMVreturns.plot (color = 'Green')
+        
+        # print (df_sorted)
+        # print (df_vol_sorted)
     @classmethod
     def change_risk_free(cls, amount):
         cls.risk_free = amount
