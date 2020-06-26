@@ -14,11 +14,11 @@ import plotly.graph_objects as go
 import plotly.io as pio
 pio.renderers.default = 'browser'
 from datetime import datetime
-# from Candlesticks_function import add_day_num
-from Candlesticks_function import graph_candles
-
-
-FinancialInfo.change_start_end('1d','2008-1-01','2009-12-31')
+import Plotting_functions
+from pypfopt.risk_models import CovarianceShrinkage
+from pypfopt.cla import CLA
+# from OOP_Financial_Info_2 import PortfolioOptm
+FinancialInfo.change_start_end('1d','2010-12-31','2019-12-31')
 
 citibank = FinancialInfo('C')
 morgan = FinancialInfo('MS')
@@ -34,44 +34,40 @@ jpm.get_data()
 # graph_candles(apple.tickerdf)
 
 
-citibank.get_financial_info()
-morgan.get_financial_info()
-goldman.get_financial_info()
-jpm.get_financial_info()
-
-
 # FinancialInfo.change_risk_free(0.002)
 
 FinancialInfo.port_rets([0.25, 0.25, 0.25, 0.25])
 
 asset_returns = FinancialInfo.Stock_data_frames
 
-portfolio_returns = FinancialInfo.Portfolio_returns
+prices = FinancialInfo.Stock_close_prices
 
-covariance = asset_returns.cov() * 252
+log_returns = FinancialInfo.log_returns
 
-print (covariance)
+mean_returns = FinancialInfo.mean_returns_avg 
 
-portfolio_variance = np.transpose(FinancialInfo.portfolio_weights)@covariance@FinancialInfo.portfolio_weights
-portfolio_volatility = np.sqrt(portfolio_variance)
-print (portfolio_volatility)
+jpm.rolling_ma(20)
 
-returns_windowed = portfolio_returns.rolling(30)
 
-volatility_series = returns_windowed.std()*np.sqrt(252)
+# FinancialInfo.monte_carlo(2500)
+# FinancialInfo.get_efficient_frontier(FinancialInfo.portfolio_weights)
+# FinancialInfo.optimization(100000)
 
-volatility_series.plot().set_ylabel('Annualized volatility, 30-day window')
-# FinancialInfo.port_weight([0.2,0.2,0.3,0.1,0.1,0.1])
+# Plotting_functions.monte_carlo_plot(FinancialInfo.pvol, FinancialInfo.prets)
 
-# FinancialInfo.port_weight([0.12,0.12,0.16,0.15,0.15,0.3])
-# FinancialInfo.get_capm()
 
-# FinancialInfo.simulation(25)
+# Plotting_functions.hist_returns(log_returns)
+
+# Plotting_functions.qqplot(log_returns['C_Close'])
+# Plotting_functions.normalized_price(prices)
+
+# plt.plot(mean_returns, linestyle = 'None', marker = 'o')
+
+# e_cov = FinancialInfo.e_cov
+
+# sample_cov = FinancialInfo.cov_mat_annual
+
+# FinancialInfo.get_efficient_frontier()
 
 # FinancialInfo.get_var()
-
-
-
-
-
 
