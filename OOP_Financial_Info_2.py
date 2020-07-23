@@ -14,6 +14,8 @@ import pandas_datareader.data as web
 import datetime
 import scipy.optimize as sco
 
+from BSM_fct import bsm_call_value
+from BSM_fct import bsm_put_value
 from scipy.stats import norm 
 from pypfopt.efficient_frontier import EfficientFrontier
 from pypfopt import expected_returns
@@ -90,6 +92,16 @@ class FinancialInfo:
                 numC +=1
         print (numH)
         print (numC)
+        
+    def call_value(self, K,T):
+        S = self.tickerdf['Close'][-1]
+        r = FinancialInfo.risk_free
+        return bsm_call_value(S,K,T, r, self.sigma_annualized)
+    def put_value(self, K,T):
+        S = self.tickerdf['Close'][-1]
+        r = FinancialInfo.risk_free
+        return bsm_put_value(S,K,T, r, self.sigma_annualized)
+    
     @classmethod
     def change_risk_free(cls, amount):
         cls.risk_free = amount
